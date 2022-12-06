@@ -5,7 +5,7 @@
         <title>Customer Social Media Response Estimator</title>
     </head>
     <header style="text-align:center;">
-        <p></p>
+        <br>
         <h1 >Customer Social Media Response Estimator</h1>
         <p>by Yuxin Cao (cao224@wisc.edu) and John Petrakian (petrakian@wisc.edu)</p>
     </header>
@@ -31,26 +31,42 @@
             which they have to manually go through social media platforms post by post. This could
             be both costly for companies and a repetitive job for whoever is in that role. As such,
             whoever would have been assigned to such a role could work on something more
-            meaningful and exciting while saving companies money. Additionally, we would ensure
+            meaningful and exciting while saving companies money. Additionally, we have ensured
             that this software program has a high enough level of certainty when analyzing images
             so that companies can rest assured that they can trust the results produced by the
             software.</p>
     <br>
     <h2 style="text-align:center;">Approach</h2>
     <h4>Our initial plan</h4>
-
+        <p>&emsp;For feature extraction and emotion classification, we planned to first implement
+            existing feature extraction and classification models such as regression trees and
+            ensembling methods to get baseline results. Then we could try to combine different
+            models to see if we can get better results. We wanted to build the model with the following steps:</p>
+            <p>&emsp;1. Acquiring image datasets from online databases.</p>
+            <p>&emsp;2. Using techniques such as edge/corner detection to detect whether the image
+                contains a face and the position of the face. We may need to create bounding
+                boxes for the detected faces so that it is easier to extract features from faces.</p>
+            <p>&emsp;3. Preprocessing the image (e.g. resizing, color correction, noise removal). We
+                probably need to use image smoothing techniques such as Gaussian filters to
+                filter the unwanted noise from the image.</p>
+            <p>&emsp;4. Extracting the important features from the face that can be used to classify the
+                emotions of the facial expressions.</p>
+            <p>&emsp;5. Training an emotion classification model using the training dataset.</p>
+            <p>&emsp;6. Testing the accuracy of our model using the testing dataset</p>
+            <p>We also planned to use the classification accuracy (i.e. the percentage of correctly predicted
+            emotions) on the testing dataset to evaluate the performance of our model.</p>
     <br>
     <h2 style="text-align:center;">Implementation</h2>
     <h4>How we made our final solution</h4>
-
+        <p></p>
     <br>
     <h2 style="text-align:center;">Results</h2>
     <h4>The outcome of our product</h4>
-
+        <p></p> 
     <br>
     <h2 style="text-align:center;">Discussion</h2>
     <h4>Problems we encountered along our development</h4>
-
+        <p></p>
     <br>
     <h2 style="text-align:center;">Demo</h2>
     <h4>A video demonstrating the functionality of our product</h4>
