@@ -44,10 +44,10 @@
     <p>&emsp;FER-2013 (URL: https://www.kaggle.com/datasets/deadskull7/fer2013)</p>
     <p>&emsp;We decided to use the classical FER-2013 dataset because it has become a benchmark for comparing the performance of different emotion recognition algorithms and models. This dataset contains 28,709 training images, 7,178 validation and testing images. The images are labeled with 7 emotions: 0 = angry, 1 = disgust, 2 = fear, 3 = happy, 4 = sad, 5 = surprise, 6 = neutral. The most prevalent emotion is happy, and the least prevalent emotion is disgust in this dataset. The images in this dataset were gathered from Google and vary in age and pose.    </p>
     <p>&emsp;Below are distributions of labels in the training dataset and testing dataset:</p>
-    <img src="testimage.png"></img>
+    <img src="image1.png"></img>
     <h4>Preprocessing:</h4>
     <p>&emsp;We rescaled the emotions images in the dataset so that they have correct numerical image values (0-255). All training and testing images were resized to (48 x 48) so that they have the same size. The images were shuffled and the batch size is 64. Also, all images were converted into grayscale for training and testing. Below are some examples of pre-processed images (in grayscale during training and testing):     </p>
-    <img src="testimage.png"></img>
+    <img src="image2.png"></img>
 
 
     <br>
@@ -57,7 +57,7 @@
     <p>&emsp;We implemented the baseline CNN model using a Sequential model in Keras. We used three blocks of 2D convolutional layers (i.e. spatial convolution for images), each with a kernel size of (3 x 3). We used the Rectified Linear Unit (ReLU) activation, which is a piecewise linear function, to make the model learn faster and perform better. Our model used the max pooling with pool size of (2 x 2) after each convolutional layer. It also used a 0.2 dropout rate as a method of regularization, which made our model more robust and less sensitive to specific weights of neurons. This should help address the problem of overfitting of our model. After the pixels were flattened, we also added three dense layers: two with ReLU activation and one with softmax.</p>
     <h4>Approach 2: Deep Convolutional Neural Networks (DCNN)</h4>
     <p>&emsp;To improve the accuracy, we then implemented the deep CNN model [Link]. The DCNN was built based on the basic CNN model, except that it added more layers to the CNN architecture. This paper proposed 3 architecture, and each is basically adding more convolutional and pooling layers to the model.</p>
-    <img src="testimage.png"></img>
+    <img src="image3.png"></img>
     <p>&emsp;Three Architectures:</p>
     <p>&emsp;Architecture #1</p>
     <p>&emsp;2 convolution layers @3 x 3 x 32 (ReLU + dropout); 1 convolution layers @3 x 3 x 64 (ReLU); 3 pooling layers @2 x 2; 2 fully-connected layer @512 & 128 (ReLU + dropout); 1 softmax layer</p>
@@ -68,9 +68,9 @@
     <h4>Final Approach: Bayesian Convolutional Neural Networks (BCNN)</h4>
     <p>&emsp;After exploring the DCNN model, we found that adding layers and tuning the hyperparameter may only increase the accuracy to a certain degree. And the CNN model (approach 1) we developed ourselves even outperformed the DCNN models in approach 2 in this particular dataset. Therefore, we decided to implement a different approach rather than simply adding more layers.</p>
     <p>&emsp;We adopted Bayesian inference on the weights of neural networks on the architecture of our first CNN model. We choose to build on top of the first model because it has higher accuracy and is a little simpler than models in the second approach.</p>
-    <img src="testimage.png"></img>
+    <img src="image4.png"></img>
     <p>&emsp;The basic idea is that instead of giving each weight in the CNN a fixed value, we assign each weight a distribution, which captures the uncertainty of weights. The benefits of using Bayesian methodology in our model is that it not only correctly classifies the facial emotion but also provides a measure of how uncertain it is about the predictions. Users will be able to know the level of confidence in addition to the accuracy of the output produced by our model and they can use the results with more caution.</p>
-    <img src="testimage.png"></img>
+    <img src="image5.png"></img>
     <p>&emsp;D: The training data in the form (xi, yi), where xi is the input image and yi is the predicted emotion; P(w): The prior probability on weights w, which represents the initial beliefs on the distribution over the weights. We used the multivariate standard normal distribution as the kernel prior; P(D|w): The likelihood function of weights w. This is the probability of seeing the data, given a particular setting of weights; P(w|D): The posterior probability of weights w, given the observed dataset; P(D): The marginal likelihood of the training data</p>
     <p>&emsp;We initialized prior probability on weights, and we updated our priors with evidence of data and likelihood to give the posterior distribution. Since the exact updates are intractable for neural networks, we used an approximation like the gradient descent method. We maximized the evidence lower bound (ELBO-loss) which was a mean of softmax cross-entropy and KL divergence. We also did batch normalization, used the ReLU activation function, and added the flipout method to approximate a regularization method to boost the robustness of our model.</p>
 
@@ -78,15 +78,15 @@
     <br>
     <h2 style="text-align:center;">Results</h2>
     <p>&emsp;To evaluate the performance, the first approach obtained a validation accuracy of around 60.57%, which is slightly lower than the results obtained from the ensembled CNN variant (see state-of-the-art section). There is a trend that the gap between training and testing accuracy is increasing, so the first approach may suffer from overfitting.</p>
-    <img src="testimage.png"></img>
+    <img src="image6.png"></img>
     <p>&emsp;After implementing the three architectures for DCNN, we found that architecture 1 achieved a test accuracy of 56.97%, architecture 2 achieved a test accuracy of 59.65%, and architecture 3 achieved a test accuracy of 59.06%. We found that adding more convolution layers indeed increased the accuracy of our model (from architecture 1 to architecture 2), but the effect became limited and even started to decrease after building the model to a certain depth. We discovered that architecture 2 actually achieved the highest accuracy.</p>
-    <img src="testimage.png"></img>
+    <img src="image7.png"></img>
     <p>&emsp;Our Bayesian CNN model yields train and test accuracy around 25%, which were lower than both CNN and deep CNN models. And the accuracies across epochs were more volatile than that of our previous CNN models. We thought one cause for this result might be the prior distribution on kernels. However, there is no clear rule for choosing an appropriate prior, so the multivariate standard normal distribution we used for the kernel may not be appropriate.</p>
-    <img src="testimage.png"></img>
+    <img src="image8.png"></img>
     <p>&emsp;Below are some examples of predictions from our Bayesian CNN model. We plotted the posterior median probability of each label. Note that our model not only outputs a distribution of labels but also generates a distribution of each label, which captures the uncertainty of our predictions and gives users more information about how certain the model is about the results. The first image was correctly classified as happy. The median probability of happy is around 0.3 (label 3). However, the second and third images were not correctly classified.</p>
-    <img src="testimage.png"></img>
-    <img src="testimage.png"></img>
-    <img src="testimage.png"></img>
+    <img src="image9.png"></img>
+    <img src="image10.png"></img>
+    <img src="image11.png"></img>
     <h4>A video demonstrating the functionality of our product</h4>
     <video width="640" height="480" controls><source src="websitedemo.mp4" type="video/mp4"></video>
 
